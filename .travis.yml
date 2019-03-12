@@ -8,8 +8,7 @@ env:
   - secure: PjPTiYnR44q9i4ckjlou7HW1W6cjp1P2z911aaYn3aQ/puBMCclLjSl7FlMDBTqg89llkA0bd5xhLjVHgsorPMWGaU4KPK9EaJDChz/xM8iShJvPgrGNwqiLoP5YnZjqTaMT+s52ALPXJaVd4K7wnMfmR814HSvckjK0Th1IDiY2MCASLJGtxUfSAPKaZG3SnzhfiuYnPPqKeH70KKXKj90npoqxc+nH/Eqel62KZCZBtwpu716uOqOEyAu4coA4XdiZ9fxd+dmKaX/JhBnxy0+qS/L17RbdoT3sZVhLWhmWFNsb4iKD1hQw2cUamXKnYzSUs2HdUIuYOjoy/itRysMqORMeHZcxeuNsxivQ3B3ATOdqajjyD1XVlULApY2E6xMiqnQl4+Qkqb9OqHBCKcUJzUKiP2FMqLaKt0+NRVyv8N7HActRl5woxPFJ6o51EapNDpeBXSNiUrrqrmkJdfnh2sazy73brzK/gJboyVAJRb/sAEoppkHlnv24yw6hdg433kCAZ1bX/futLISzIH6h3KtBz2NW/NlWd9i+S1JDld38D7RxnVIsV3jPy3xSVJZDtp0XY1rNGmoVOI56tuzncAQqISqZ+5Za3mz/fC1hA6N9fLBbJzE/bk+MBN2icqMZe89VikLPDcBKp/U2RvrNKluLfO4QUsVEbkecN2U=  # DOCKER_USERNAME
   - secure: KzioGHM4D+Qihd8wnaSI5kYWo6+KRmVmxPRPczYJfm4llSjnoGvLIXr/aiEsm5/6lm5/s2iv2R0YswBXJBFAGMGsJcLSF73CHSeCAelKYoidcV06ITu2zqcJwPNfhaMvkVRKPEm9m3IL7XfsOpyD1Kqml67YJ/pXHOdwWNANND7OlCYdKAJM3FlSlrodVy7QIlwSyMjCFXfEKZA2PcIwHJy1NoJCF9xWhHlFHUYYrisRxh1Vc7sAn2T++oXMeG6zThMEBrZteTSYC3eL0BQFFjJC8X0MZe6NZFJCFXmq4RbGT92xPP3TNY4G89ot6fM1mGcASTk3v7NXe9Jv8iDMikMPZ/SdPefLkuV53kwOpC5AWZqbdXIfM8Gtx+g9PKVkIwp1IfHVJ04gbebMlMAnXYbe9a1Es0MI22JDMkQaSJ64G55jRJ924Z9EM6oWrjZGO/Cis8QObYJj3Bho4eE0FPr85tCHTg77+5eAxJaZAhRN5du5Leus2JJF9PeBqBBS+2AyCJLR6E0ncxpCXVdkzutyA6jiv5pnG9v2AiVGofzQbcadS7XMVqqwWWssF3uopUQJ9l5ql8a2SNrqA0pOHNad+NWC5GXLHNg5VNOgbqXVBbycPRSKtsWhZ525a8FfJnTazhC4Fe1ASchW7UxcwitmQropGy2W8BMPx2RmKJA=  # DOCKER_PASSWORD
 before_script:
-- version="$(awk -F= '/MAVEN_VERSION=/ {print $2}' Dockerfile | cut -d " " -f 1)"
-- base_version="jdk$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
+- version="$(awk -F '[:]' '/FROM/ {print $2}' Dockerfile)"
 script:
 - docker build -t "$IMAGE_NAME" .
 after_script:
@@ -18,10 +17,8 @@ before_deploy:
 - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
 - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}"
-- docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}-${base_version}"
 deploy:
   provider: script
   script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${version}"
-    && docker push "${IMAGE_NAME}:${version}-${base_version}"
   on:
     branch: master
