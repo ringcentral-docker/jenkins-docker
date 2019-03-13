@@ -1,4 +1,4 @@
-FROM jenkinsci/jenkins:lts
+FROM jenkinsci/jenkins:latest
 LABEL maintainer="john.lin@ringcentral.com"
 
 USER root
