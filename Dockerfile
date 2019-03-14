@@ -26,6 +26,6 @@ RUN curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOS
     chmod +x /usr/local/bin/docker-compose
 
 # add the jenkins user to the docker group so that sudo is not required to run docker commands
-RUN groupmod docker && gpasswd -a jenkins docker
-
+RUN groupmod docker && gpasswd -a jenkins docker && \
+    chmod 666 /var/run/docker.sock
 USER jenkins
