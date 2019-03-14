@@ -25,7 +25,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
 RUN curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
-# add the jenkins user to the docker group so that sudo is not required to run docker commands
-RUN groupmod docker && gpasswd -a jenkins docker && \
-    chmod 666 /var/run/docker.sock
+# add the jenkins user to the root group so that sudo is not required to run docker commands
+RUN gpasswd -a jenkins root
+
 USER jenkins
